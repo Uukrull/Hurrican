@@ -458,6 +458,9 @@ void GameLoop(void)
     if (KeyDown(DIK_ESCAPE) && Player[0].GameOverTimer == 0.0f)
         LeaveGameLoop();
 
+	if (DirectInput.Joysticks[0].ButtonMenuPressed() && Player[0].GameOverTimer == 0.0f)
+        LeaveGameLoop();
+
 #if defined(GCW)
     // On GCW Zero, same check as above, but using the internal controls
     if (DirectInput.InternalJoystickMainMenuButtonDown() && Player[0].GameOverTimer == 0.0f)

@@ -631,6 +631,14 @@ bool PlayerClass::GetPlayerInput(void)
                 bool hat_up    = false;
                 bool hat_down  = false;
 
+				if (strcmp (DirectInput.Joysticks[JoystickIndex].JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+				{
+					if (DirectInput.Joysticks[JoystickIndex].JoystickButtons[4]) hat_up = true;
+					if (DirectInput.Joysticks[JoystickIndex].JoystickButtons[5]) hat_right = true;
+					if (DirectInput.Joysticks[JoystickIndex].JoystickButtons[6]) hat_down = true;
+					if (DirectInput.Joysticks[JoystickIndex].JoystickButtons[7]) hat_left = true;
+				}
+				
                 if (DirectInput.Joysticks[JoystickIndex].JoystickPOV != -1) {
                     // HAT switch is pressed
                     if     (DirectInput.Joysticks[JoystickIndex].JoystickPOV     >= 4500 * 1 &&

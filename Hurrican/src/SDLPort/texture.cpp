@@ -180,8 +180,10 @@ bool load_texture( image_t& image, GLuint &new_texture )
 
         if (image.compressed == true)
         {
+#if !defined(MINGW)
             glCompressedTexImage2D( GL_TEXTURE_2D, 0, image.format,
                                     image.w, image.h, 0, image.size, image.data+image.offset );
+#endif
         }
         else
         {

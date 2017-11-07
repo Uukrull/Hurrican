@@ -28,6 +28,9 @@
 #include <windows.h>									// Alle Windows Header includen
 #include <Dxerr8.h>
 #endif
+#if defined(MINGW)
+#include <windows.h>
+#endif
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -278,9 +281,9 @@ bool CreateDir(const char *dir)
 {
     if (!dir) return false;
 
-#if defined (PLATFORM_DIRECTX)
+#if defined (MINGW)
 	struct _stat	st;
-	return (_stat(dir, &st) != 0) ? (mkdir(dir) == 0) : (_S_ISDIR(st.st_mode) != 0);
+	return (_stat(dir, &st) != 0) ? (mkdir(dir) == 0) : (S_ISDIR(st.st_mode) != 0);
 #else
 	struct stat	st;
 	return (stat(dir, &st) != 0) ? (mkdir(dir, 0755) == 0) : (S_ISDIR(st.st_mode) != 0);
@@ -291,12 +294,12 @@ bool CreateDir(const char *dir)
 // If directory exists (and is indeed a directory), return true
 bool FindDir(const char *dir)
 {
-#if defined (PLATFORM_DIRECTX)
+#if defined (MINGW)
     struct _stat st;
     if (!dir || _stat(dir, &st) != 0)
         return false;
     else 
-        return _S_ISDIR(st.st_mode) != 0;
+        return S_ISDIR(st.st_mode) != 0;
 #else
     struct stat st;
     if (!dir || stat(dir, &st) != 0)

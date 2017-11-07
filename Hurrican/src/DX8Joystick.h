@@ -83,5 +83,6 @@ public:
 
     // Returns true if button(s) serving as Delete key are pressed (For menus, esp. button mapping menu)
     bool ButtonDeletePressed(void);
+    bool ButtonMenuPressed(void);
 };
 #endif

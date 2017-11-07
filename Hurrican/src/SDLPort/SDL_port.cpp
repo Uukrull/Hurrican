@@ -41,6 +41,7 @@ void D3DXMatrixIdentity( D3DXMATRIXA16* m )
     m->identity();
 }
 
+#ifndef MINGW
 void fopen_s( FILE** file, const char* path, const char* mode )
 {
     *file = fopen( path, mode );
@@ -56,34 +57,9 @@ void strcat_s( char* dst, uint32_t size, const char* src )
     strncat( dst, src, size );
 }
 
-void strncat_s( char* dst, const char* src, uint32_t size )
-{
-    strncat( dst, src, size );
-}
-
-void strcpy_s( char* dst, int size, const char* src )
-{
-    strncpy( dst, src, size);
-}
-
-void strcpy_s( char* dst, const char* src )
-{
-    strcpy( dst, src );
-}
-
-void strncpy_s( char* dst, const char* src, int size )
-{
-    strncpy( dst, src, size );
-}
-
 void fprintf_s( FILE* file, const char* src)
 {
     fprintf( file, "%s", src );
-}
-
-void _itoa_s( int value, char* dst, int size )
-{
-    sprintf( (char*)dst, "%d", value );
 }
 
 #define SWAP(T, a, b) \
@@ -103,6 +79,32 @@ char* _strrev( char *s )
     }
 
     return s;
+}
+#endif
+
+void strcpy_s( char* dst, int size, const char* src )
+{
+    strncpy( dst, src, size);
+}
+
+void strcpy_s( char* dst, const char* src )
+{
+    strcpy( dst, src );
+}
+
+void strncpy_s( char* dst, const char* src, int size )
+{
+    strncpy( dst, src, size );
+}
+
+void _itoa_s( int value, char* dst, int size )
+{
+    sprintf( (char*)dst, "%d", value );
+}
+
+void strncat_s( char* dst, const char* src, uint32_t size )
+{
+    strncat( dst, src, size );
 }
 
 uint32_t getpixel( SDL_Surface *surface, int16_t x, int16_t y )
@@ -309,7 +311,7 @@ uint8_t LoadGLFunctions( void )
 #endif /* defined(USE_FBO) */
 #endif
 
-#if defined(USE_GL1) || defined(USE_GL2)
+#if (defined(USE_GL1) || defined(USE_GL2)) && !defined(MINGW)
     LOAD_OPENGL_PROC( PFNGLCOMPRESSEDTEXIMAGE2DARBPROC,     glCompressedTexImage2D );
     LOAD_OPENGL_PROC( PFNGLGETCOMPRESSEDTEXIMAGEARBPROC,    glGetCompressedTexImageARB );
 #endif
@@ -359,7 +361,7 @@ PFNGLDELETERENDERBUFFERSEXTPROC     glDeleteRenderbuffers       = NULL;
 #endif /* defined(USE_FBO) */
 #endif
 
-#if defined(USE_GL1) || defined(USE_GL2)
+#if (defined(USE_GL1) || defined(USE_GL2)) && !defined(MINGW)
 /* GL_ARB_texture_compression */
 PFNGLCOMPRESSEDTEXIMAGE2DARBPROC    glCompressedTexImage2D      = NULL;
 PFNGLGETCOMPRESSEDTEXIMAGEARBPROC   glGetCompressedTexImageARB  = NULL;

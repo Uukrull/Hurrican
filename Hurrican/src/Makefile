@@ -12,7 +12,7 @@
 # pandora     : Pandora handheld (OpenGLES2)
 
 ifndef TARGET
-TARGET := linux_GL1
+TARGET := s905
 endif
 
 
@@ -60,6 +60,52 @@ DEFINES += -DUSE_INDEXED_BATCH
 #USE_UNRARLIB := yes
 
 # *** END OPTIONAL DEFINES ***
+
+
+ifeq ($(TARGET),mingw)
+
+EXE := hurrican.exe
+CXX := g++
+CC  := gcc
+LD  := g++
+STRIP := strip
+RM  := rm -f
+
+USE_GL2 := yes
+USE_UNRARLIB := yes
+
+DEFINES += -DMINGW -D__WIN32__ -DUSE_GLFULL -Dmain=SDL_main
+
+INCLUDES_OS := -I/mingw32/include -I/mingw32/include/SDL2 -I/mingw32/include/GL -I/mingw32/include/libmodplug
+LDFLAGS := -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer -lSDL2_image -lmodplug -lopengl32
+
+endif
+
+ifeq ($(TARGET),s905)
+
+LIBDEV = armv8a-libreelec-linux-gnueabi-
+CXX =  	$(LIBDEV)g++
+CC = 	$(LIBDEV)gcc
+LD =  	$(LIBDEV)g++
+STRIP =	$(LIBDEV)strip
+RM  := rm -f
+
+EXE := hurrican
+
+USE_EGL := yes
+USE_GL2 := yes
+
+DEFINES += -DUSE_EGL_RAW -DUSE_GLES2 -DS905
+
+INCLUDES_OS := -ISDL_port \
+               -I$(SYSROOT_PREFIX)/usr/include/SDL2 \
+               -I$(SYSROOT_PREFIX)/usr/include/libmodplug \
+               -I$(SYSROOT_PREFIX)/usr/include -I$(SYSROOT_PREFIX)/usr/include/GLES2
+
+LDFLAGS := -L$(SYSROOT_PREFIX)/usr/lib --sysroot=$(SYSROOT_PREFIX) -lSDL2_mixer -lSDL2_image -lpthread -ldl -lvorbisfile -lvorbis -logg -lFLAC -lsmpeg2 -lmodplug -lpng -ljpeg -lz -lGLESv2 -lSDL2
+CFLAGS := -march=armv8-a+crc -mabi=aapcs-linux -Wno-psabi -Wa,-mno-warn-deprecated -mcpu=cortex-a53 -mfloat-abi=hard -mfpu=neon-fp-armv8 -fomit-frame-pointer -Wall -pipe -flto -ffat-lto-objects
+
+endif
 
 
 ifeq ($(TARGET),aros)
@@ -269,7 +315,7 @@ COMMON_CXXFLAGS += -Wno-unused-local-typedefs
 endif
 
 
-COMMON_CXXFLAGS += $(INCLUDES) $(DEFINES)
+COMMON_CXXFLAGS += $(INCLUDES) $(DEFINES)  $(CFLAGS)
 
 ifdef _DEBUG
 # Debug build:
@@ -474,6 +520,7 @@ ALL_OBJS := $(addsuffix .o, $(ALL_FILES))
 
 $(EXE) : $(ALL_OBJS)
 	$(LD) $^ $(LDFLAGS) -o $@
+	$(STRIP) $(EXE)
 	
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) $< -o $@

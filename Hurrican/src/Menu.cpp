@@ -1818,6 +1818,14 @@ void MenuClass::DoMenu(void)
             }
 #endif // GCW
 
+			if (strcmp (DirectInput.Joysticks[joy_idx].JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+			{
+				if (DirectInput.Joysticks[joy_idx].JoystickButtons[4]) joy_up = true;
+				if (DirectInput.Joysticks[joy_idx].JoystickButtons[5]) joy_right = true;
+				if (DirectInput.Joysticks[joy_idx].JoystickButtons[6]) joy_down = true;
+				if (DirectInput.Joysticks[joy_idx].JoystickButtons[7]) joy_left = true;
+			}
+
             if (DirectInput.Joysticks[joy_idx].JoystickPOV != -1) {
                 // HAT switch is pressed
                 if        (DirectInput.Joysticks[joy_idx].JoystickPOV >= 4500 * 1 &&

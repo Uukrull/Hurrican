@@ -111,7 +111,7 @@ extern PFNGLDELETERENDERBUFFERSEXTPROC      glDeleteRenderbuffers;
 #endif /* defined(USE_FBO) */
 #endif
 
-#if defined(USE_GL1) || defined(USE_GL2)
+#if (defined(USE_GL1) || defined(USE_GL2)) && !defined(MINGW)
 /* GL_ARB_texture_compression */
 extern PFNGLCOMPRESSEDTEXIMAGE2DARBPROC     glCompressedTexImage2D;
 extern PFNGLGETCOMPRESSEDTEXIMAGEARBPROC    glGetCompressedTexImageARB;

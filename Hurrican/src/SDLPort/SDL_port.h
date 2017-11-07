@@ -115,17 +115,19 @@ struct D3DXVECTOR2
     FLOAT y;
 };
 
-#define sprintf_s   sprintf
+#ifndef MINGW
 void fopen_s        ( FILE** file, const char* path, const char* mode );
 void strcat_s       ( char* dst, const char* src );
 void strcat_s       ( char* dst, uint32_t size, const char* src );
-void strncat_s      ( char* dst, const char* src, uint32_t size );
-void strcpy_s       ( char* dst, int size, const char* src );
-void strcpy_s       ( char* dst, const char* src );
-void strncpy_s      ( char* dst, const char* src, int size );
 void fprintf_s      ( FILE* file, const char* src );
-void _itoa_s        ( int value, char* dst, int size );
 char* _strrev       ( char *);
+#endif
+void strcpy_s       ( char* dst, const char* src );
+void strcpy_s       ( char* dst, int size, const char* src );
+void strncpy_s      ( char* dst, const char* src, int size );
+void _itoa_s        ( int value, char* dst, int size );
+void strncat_s      ( char* dst, const char* src, uint32_t size );
+#define sprintf_s   sprintf
 
 #ifndef __WIN32__
 void DeleteFile( const char* filename );

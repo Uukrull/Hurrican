@@ -1242,7 +1242,11 @@ void DirectGraphicsClass::SetupFramebuffers( void )
     if (CommandLineParams.LowRes) {
         glViewport( 0, 0, LOWRES_SCREENWIDTH, LOWRES_SCREENHEIGHT);
     } else {
+#if !defined(S905)
         glViewport( WindowView.x, WindowView.y, WindowView.w, WindowView.h );    /* Setup our viewport. */
+#else
+        glViewport( 240, 0, 1440, 1080 );    /* Setup our viewport. */
+#endif        
     }
     Protokoll.WriteText( false, "Window viewport: %dx%d at %dx%d\n", WindowView.w, WindowView.h, WindowView.x, WindowView.y );
 }

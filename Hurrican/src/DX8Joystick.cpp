@@ -201,6 +201,11 @@ bool DirectJoystickClass::Init(HWND hwnd, LPDIRECTINPUT8 lpDI)
 bool DirectJoystickClass::Init(int joy)
 {
     lpDIJoystick = SDL_JoystickOpen(joy);
+#if SDL_VERSION_ATLEAST(2,0,0)
+	SDL_Joystick* index = lpDIJoystick;
+#else
+	int index = joy;
+#endif
 
     if (lpDIJoystick == NULL)
     {
@@ -215,10 +220,10 @@ bool DirectJoystickClass::Init(int joy)
     CanForceFeedback = false;       // Forced false for now until implemented
 
     // Get joystick's name
-    if (strlen(SDL_JoystickName(joy)) < sizeof(JoystickName)) {
-        strcpy_s(JoystickName, SDL_JoystickName(joy));
+    if (strlen(SDL_JoystickName(index)) < sizeof(JoystickName)) {
+        strcpy_s(JoystickName, SDL_JoystickName(index));
     } else {
-        strcpy_s(JoystickName, sizeof(JoystickName)-1, SDL_JoystickName(joy));      // Truncate to fit 
+        strcpy_s(JoystickName, sizeof(JoystickName)-1, SDL_JoystickName(index));      // Truncate to fit 
         JoystickName[sizeof(JoystickName)-1] = '\0';                                // and null-terminate 
     }
 
@@ -356,15 +361,32 @@ bool DirectJoystickClass::Update(void)
 //DKS-Added these three for better joystick support, esp in menus
 bool DirectJoystickClass::ButtonEnterPressed(void)
 {
-    return JoystickButtons[0];   // Default is button 0
+	if (strcmp (JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+		return JoystickButtons[14];
+	else
+	    return JoystickButtons[0];   // Default is button 0
 }
 
 bool DirectJoystickClass::ButtonEscapePressed(void)
 {
-    return JoystickButtons[1];   // Default is button 1
+	if (strcmp (JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+		return JoystickButtons[13];
+	else
+	    return JoystickButtons[1];   // Default is button 1
 }
 
 bool DirectJoystickClass::ButtonDeletePressed(void)
 {
-    return JoystickButtons[4];   // Default is button 4
+	if (strcmp (JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+		return JoystickButtons[12];
+	else
+	    return JoystickButtons[3];   // Default is button 3
+}
+
+bool DirectJoystickClass::ButtonMenuPressed(void)
+{
+	if (strcmp (JoystickName, "PLAYSTATION(R)3 Controller") == 0)
+		return JoystickButtons[3];
+	else
+	    return JoystickButtons[9];   // Default is button 9
 }
